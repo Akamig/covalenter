@@ -39,6 +39,13 @@
   padding-top:1rem;
   background-color: lightgray;
   height: calc(100vh - 8.5rem);
+  overflow-y: scroll;
+  rotate:180deg;
+}
+
+.ScrollInner {
+  scroll-snap-align: end;
+  rotate:180deg;
 }
 
 button {
