@@ -1,19 +1,27 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import useSWR from "swr";
 import logo from "./logo.svg";
+import fetch from 'unfetch'
 import "./App.css";
 
 function App() {
   const [name, setName] = useState("me");
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
+  const fetcher = (url: string) => fetch(url).then(r => r.json())
+  const { data } = useSWR(`localhost:8080/chat`, fetcher, {
+    refreshInterval: 1000,
+  });
 
   const sendMessage = (event) => {
     event.preventDefault();
     setMessages((event) => messages.concat(message));
     setMessage("");
   };
-
+  useEffect(() => {
+    setMessages((data) => messages.concat(data));
+    console.log(data);
+  });
   return (
     <div className="App">
       <div className="Main">
