@@ -1,18 +1,44 @@
-import React, { useState } from "react";
+import { useEffect, useState } from "react";
+import fetch from "unfetch";
 import useSWR from "swr";
 import logo from "./logo.svg";
 import "./App.css";
+const url = "http://localhost:8080/chat";
 
 function App() {
-  const [name, setName] = useState("me");
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
 
   const sendMessage = (event) => {
     event.preventDefault();
-    setMessages((event) => messages.concat(message));
+    setMessages(messages.concat(event.target.value));
+    fetch(url, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ message: message }),
+    });
     setMessage("");
   };
+
+  const subscribe = async (url: string) => {
+    let response = await fetch(url);
+    if (response.status == 502) {
+      await subscribe(url);
+    } else if (response.status != 200) {
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      await subscribe(url);
+    } else {
+      let msg = await response.json();
+      setMessages(messages.concat(msg.message));
+      await subscribe(url);
+    }
+  };
+
+  useEffect(() => {
+    subscribe(url);
+  }, []);
 
   return (
     <div className="App">
@@ -24,10 +50,8 @@ function App() {
           </div>
           <div className="ScrollContent">
             <ol className="ScrollInner">
-              {messages.map((message, i) => (
-                <li key={i}>
-                  {name}: {message}
-                </li>
+              {messages.map((msg, i) => (
+                <li key={i}>{msg}</li>
               ))}
             </ol>
           </div>
