@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import fetch from "unfetch";
 import useSWR from "swr";
+import { subscribe } from "./api";
 import logo from "./logo.svg";
 import "./App.css";
 const url = "http://localhost:8080/chat";
@@ -11,7 +12,7 @@ function App() {
 
   const sendMessage = (event) => {
     event.preventDefault();
-    setMessages(messages.concat(event.target.value));
+    setMessages(messages.concat(message));
     fetch(url, {
       method: "POST",
       headers: {
@@ -20,20 +21,6 @@ function App() {
       body: JSON.stringify({ message: message }),
     });
     setMessage("");
-  };
-
-  const subscribe = async (url: string) => {
-    let response = await fetch(url);
-    if (response.status == 502) {
-      await subscribe(url);
-    } else if (response.status != 200) {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      await subscribe(url);
-    } else {
-      let msg = await response.json();
-      setMessages(messages.concat(msg.message));
-      await subscribe(url);
-    }
   };
 
   useEffect(() => {

@@ -5,14 +5,15 @@
 }
 
 .Main {
-  width: 30rem;
+  width: 90vw;
   max-width: 90%;
 }
 
 .MessageWrapper {
-  max-height: 100vh;
+  height:100vh;
   font-size: 1rem;
-  border: 2px solid lightgray;
+  display:flex;
+  flex-direction: column;
 }
 
 .TopContent {
@@ -36,9 +37,8 @@
 }
 
 .ScrollContent {
-  padding-top:1rem;
   background-color: lightgray;
-  height: calc(100vh - 8.5rem);
+  height: 100%;
   overflow-y: scroll;
   rotate:180deg;
 }
@@ -48,6 +48,16 @@
   rotate:180deg;
 }
 
+.input{
+  flex-grow: 1;
+  font-size: calc(4rem);
+}
+
 button {
-  font-size: calc(10px + 2vmin);
+
+}
+
+ol{
+  padding:0;
+  margin: 1rem;
 }
